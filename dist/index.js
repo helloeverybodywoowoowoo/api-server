@@ -7,8 +7,11 @@ const express_1 = __importDefault(require("express"));
 const uuid_1 = require("uuid");
 //dotenv.config()
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 let products = [
     {
+        id_: (0, uuid_1.v4)(),
         id: '1',
         title: 'Sample Product',
         image: 'https://example.com/image.jpg',
@@ -26,6 +29,7 @@ app.get('/products', (req, res) => {
 });
 // CREATE a new product
 app.post('/product', (req, res) => {
+    console.log(req.body);
     const newProduct = Object.assign({ id: (0, uuid_1.v4)() }, req.body);
     products.push(newProduct);
     res.status(201).json(newProduct);

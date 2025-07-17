@@ -7,10 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Update } from './Update';
 
 //dotenv.config()
-const app = express()
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 let products: Product[] = [
     {
+        id_: uuidv4(),
         id: '1',
         title: 'Sample Product',
         image: 'https://example.com/image.jpg',
@@ -31,6 +34,7 @@ app.get('/products', (req: Request, res: Response<Product[]>) => {
 
 // CREATE a new product
 app.post('/product', (req: Request, res: Response<Product>) => {
+    console.log(req.body);
     const newProduct: Product = { id: uuidv4(), ...req.body };
     products.push(newProduct);
     res.status(201).json(newProduct);
