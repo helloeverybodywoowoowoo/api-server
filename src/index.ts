@@ -5,11 +5,15 @@ import { Product } from './Products';
 import express, { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Update } from './Update';
+import connectDB from './db';
+import ProductModel, { IProduct } from './models/Products';
 
 //dotenv.config()
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+connectDB();
 
 let products: Product[] = [
     {
@@ -33,11 +37,14 @@ app.get('/products', (req: Request, res: Response<Product[]>) => {
 });
 
 // CREATE a new product
-app.post('/product', (req: Request, res: Response<Product>) => {
-    console.log(req.body);
-    const newProduct: Product = { id: uuidv4(), ...req.body };
-    products.push(newProduct);
-    res.status(201).json(newProduct);
+app.post('/product', async (req: Request, res: Response) => {
+  try {
+    const newProduct = new ProductModel({ id_: uuidv4(), ...req.body });
+    const savedProduct = await newProduct.save();
+    res.status(201).json(savedProduct);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create product' });
+  }
 });
 
 // UPDATE a product by ID
