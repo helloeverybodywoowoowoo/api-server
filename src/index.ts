@@ -1,5 +1,4 @@
 //import mongoose from 'mongoose'
-//import cors from 'cors'
 //import dotenv from 'dotenv'
 import { Product } from './Products';
 import express, { Request, Response } from 'express';
@@ -7,11 +6,17 @@ import { v4 as uuidv4 } from 'uuid';
 import { Update } from './Update';
 import connectDB from './db';
 import ProductModel, { IProduct } from './models/Products';
+import cors from 'cors'
 
 //dotenv.config()
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: "http://localhost:5173", // or your frontend URL
+  credentials: true,
+}));
+
 
 connectDB();
 /*
@@ -80,7 +85,6 @@ app.delete('/products/:id', async (req: Request<{ id: string }>, res: Response) 
   
 });
 
-//app.use(cors())
 
 app.listen(5000, () => console.log('Server on port 5000'))
 

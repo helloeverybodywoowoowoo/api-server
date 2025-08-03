@@ -16,10 +16,15 @@ const express_1 = __importDefault(require("express"));
 const uuid_1 = require("uuid");
 const db_1 = __importDefault(require("./db"));
 const Products_1 = __importDefault(require("./models/Products"));
+const cors_1 = __importDefault(require("cors"));
 //dotenv.config()
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cors_1.default)({
+    origin: "http://localhost:5173", // or your frontend URL
+    credentials: true,
+}));
 (0, db_1.default)();
 /*
 let products: Product[] = [
@@ -81,5 +86,4 @@ app.delete('/products/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(500).json({ error: 'Failed to delete product' });
     }
 }));
-//app.use(cors())
 app.listen(5000, () => console.log('Server on port 5000'));
